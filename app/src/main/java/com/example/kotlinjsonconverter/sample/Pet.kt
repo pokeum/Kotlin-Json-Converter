@@ -22,11 +22,15 @@ data class Pet(
     val gender: Char?,
     @JvmField
     @SerialName("foods")
-    val foods: Map<String, PetFood?>?
-    /** Doesn't support */
-    //val foods: Collection<Collection<PetFood?>?>?
-    //val foods: Collection<Map<String, PetFood?>?>?
-    //val foods: Map<String, Collection<PetFood?>?>?
+    //val foods: Map<String, PetFood?>?
+    //val foods: Collection<PetFood?>?
     //val foods: Map<String, Map<String, PetFood?>?>?
+    //val foods: Map<String, Map<String, String?>?>?
+    val foods: Map<String, Collection<PetFood?>?>?
+    //val foods: Map<String, Collection<String?>?>?
+    //val foods: Collection<Map<String, PetFood?>?>?
+    //val foods: Collection<Map<String, String?>?>?
+    //val foods: Collection<Collection<PetFood?>?>?
+    //val foods: Collection<Collection<String?>?>?
     //val foods: Collection<Collection<Collection<PetFood?>?>?>?
 )

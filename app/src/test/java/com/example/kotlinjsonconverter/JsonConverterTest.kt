@@ -12,8 +12,6 @@ import com.example.kotlinjsonconverter.sample.stub.toPetFoodObject
 import com.example.kotlinjsonconverter.sample.stub.toPrimitiveTestObject
 import com.example.kotlinjsonconverter.sample.toJSONObject
 
-import com.example.kotlinjsonconverter.sample.stub.toJSONObject as _toJSONObject
-
 class JsonConverterTest {
 
     @Test
@@ -28,7 +26,7 @@ class JsonConverterTest {
     fun jsonTest_Pet() {
         println("===> JSONObject")
         val pet = generate_Pet_Cat()
-        val petJsonString = pet._toJSONObject().toString(4)
+        val petJsonString = pet.toJSONObject().toString(4)
         println(petJsonString)
     }
 
