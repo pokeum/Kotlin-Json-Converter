@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: Kotlin_Json_Converter.codegen.codegen">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/codegen/build/libs/codegen.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

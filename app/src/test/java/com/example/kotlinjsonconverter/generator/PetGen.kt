@@ -15,8 +15,16 @@ fun generate_Pet_Cat() = Pet(
     true,
     12.5,
     'F',
-    mapOf("breakfast" to listOf(generate_CatFood_A(), generate_CatFood_B()),
-        "lunch" to listOf(generate_CatFood_C(), null))
+    listOf(
+        listOf(
+            listOf(generate_CatFood_A(), generate_CatFood_B()),
+            listOf(generate_CatFood_C(), null)
+        ),
+        listOf(
+            listOf(generate_CatFood_A(), generate_CatFood_B()),
+            listOf(generate_CatFood_C(), null)
+        )
+    )
 )
 
 fun generate_Pet_Alligator() = Pet(

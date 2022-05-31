@@ -11,6 +11,7 @@ import com.squareup.kotlinpoet.*
 import org.json.JSONArray
 import org.json.JSONObject
 import javax.lang.model.type.DeclaredType
+import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
 import javax.tools.Diagnostic
 
@@ -36,7 +37,7 @@ object CodeGen {
             .returns(JSONObject::class)
             .addStatement("val obj = %L()", JSON_OBJECT_CLASS_NAME.simpleName)
         binding.getFieldBindings().forEach {
-            builder.addCode(createToJSONObjectCodeBlock(FieldInfo(it, it.getType())))
+            builder.addCode(createToJSONObjectCodeBlock(FieldInfo(it)))
         }
         builder.addStatement("return obj")
         return builder.build()
@@ -44,14 +45,15 @@ object CodeGen {
 
     private fun createToJSONObjectCodeBlock(fieldInfo: FieldInfo): CodeBlock {
         val builder = CodeBlock.builder()
-        if (fieldInfo.isDefault()) {
+        if (fieldInfo.isPrimitiveOrCharSequence()) {
             builder.add(createToJSONObjectDefaultAndSerializableCodeBlock(fieldInfo))
-        } else if (fieldInfo.isDeclared()) {
+        } else if (fieldInfo.currentType.kind.equals(TypeKind.DECLARED)) {
             val declaredType = fieldInfo.currentType as DeclaredType
             when {
                 fieldInfo.currentType.isExtendedBy(Collection::class.java) -> {
                     val elementType = declaredType.typeArguments[0]
-                    builder.add(createToJSONObjectMapAndCollectionCodeBlock(fieldInfo, elementType, false))
+                    builder.add(createToJSONObjectMapAndCollectionCodeBlock(
+                        fieldInfo, elementType, true))
                 }
                 fieldInfo.currentType.isExtendedBy(Map::class.java) -> {
                     val keyType = declaredType.typeArguments[0]
@@ -63,7 +65,8 @@ object CodeGen {
                         )
                     }
                     val valueType = declaredType.typeArguments[1]
-                    builder.add(createToJSONObjectMapAndCollectionCodeBlock(fieldInfo, valueType, true))
+                    builder.add(createToJSONObjectMapAndCollectionCodeBlock(
+                        fieldInfo, valueType, false))
                 }
                 else -> {
                     val valueTypeElement = declaredType.asElement()
@@ -83,47 +86,52 @@ object CodeGen {
     }
 
     private fun createToJSONObjectMapAndCollectionCodeBlock(
-        fieldInfo: FieldInfo, nestedType: TypeMirror, isOuterTypeMap: Boolean): CodeBlock {
+        fieldInfo: FieldInfo, nestedType: TypeMirror, isOuterTypeCollection: Boolean): CodeBlock {
         val builder = CodeBlock.builder()
         val objectName = fieldInfo.generateObjectName()
         val innerObjectName = fieldInfo.generateObjectName()
         builder
-            .beginControlFlow("if (%L != null)", fieldInfo.valueObject)
+            .beginControlFlow("if (%L != null)", fieldInfo.iterableObject)
             .addStatement("val %L = %L()", objectName,
-                if (isOuterTypeMap) JSON_OBJECT_CLASS_NAME.simpleName
-                else JSON_ARRAY_CLASS_NAME.simpleName)
-            .beginControlFlow("for (%L in %L!!)", innerObjectName, fieldInfo.valueObject)
-            .add(createToJSONObjectCodeBlock(fieldInfo.next(nestedType, isOuterTypeMap)))
+                if (isOuterTypeCollection) JSON_ARRAY_CLASS_NAME.simpleName
+                else JSON_OBJECT_CLASS_NAME.simpleName)
+            .beginControlFlow("for (%L in %L!!)", innerObjectName, fieldInfo.iterableObject)
+            .add(createToJSONObjectCodeBlock(fieldInfo.next(nestedType, isOuterTypeCollection)))
             .endControlFlow()
-        if (fieldInfo.keyName != null) {
+        if (fieldInfo.isOuterTypeCollection()) {
+            builder.addStatement("%L.put(%L)", fieldInfo.parentJsonObject, objectName)
+        } else {
             builder.addStatement("%L.put(${if (fieldInfo.isFirst) "%S" else "%L"}, %L)",
-                fieldInfo.putObject, fieldInfo.keyName, objectName)
-        } else { builder.addStatement("%L.put(%L)", fieldInfo.putObject, objectName) }
+                fieldInfo.parentJsonObject, fieldInfo.key, objectName)
+        }
         builder.endControlFlow()
         return builder.build()
     }
 
     private fun createToJSONObjectDefaultAndSerializableCodeBlock(fieldInfo: FieldInfo): CodeBlock {
+
+        fun format(pre: String, post: String): String {
+            val formatSB = StringBuilder()
+            formatSB.append(pre)
+            if (!fieldInfo.isPrimitiveOrCharSequence()) {
+                formatSB.append("?.${TO_JSON_OBJECT_FUN_NAME}()")
+            }
+            formatSB.append(post)
+            return formatSB.toString()
+        }
+
         val builder = CodeBlock.builder()
-        val formatSB = StringBuilder()
         if (fieldInfo.isFirst) {
-            formatSB.append("obj.put(%S, %L")
-            if (!fieldInfo.isDefault()) { formatSB.append(".${TO_JSON_OBJECT_FUN_NAME}()") }
-            formatSB.append(")")
-            builder.addStatement(formatSB.toString(), fieldInfo.binding.getKeyName(), fieldInfo.binding.getFieldName())
+            builder.addStatement(format("obj.put(%S, %L", ")"),
+                fieldInfo.binding.getKeyName(), fieldInfo.binding.getFieldName())
         } else {
             val objectName = "obj_${fieldInfo.getObjectID() - 2}"
             val innerObjectName = "obj_${fieldInfo.getObjectID() - 1}"
-            if (fieldInfo.isOuterTypeMap()) {
-                formatSB.append("%L.put(%L.key, %L.value")
-                if (!fieldInfo.isDefault()) { formatSB.append("?.${TO_JSON_OBJECT_FUN_NAME}()") }
-                formatSB.append(")")
-                builder.addStatement(formatSB.toString(), objectName, innerObjectName, innerObjectName)
+            if (fieldInfo.isOuterTypeCollection()) {
+                builder.addStatement(format("%L.put(%L", ")"), objectName, innerObjectName)
             } else {
-                formatSB.append("%L.put(%L")
-                if (!fieldInfo.isDefault()) { formatSB.append("?.${TO_JSON_OBJECT_FUN_NAME}()") }
-                formatSB.append(")")
-                builder.addStatement(formatSB.toString(), objectName, innerObjectName)
+                builder.addStatement(format("%L.put(%L.key, %L.value", ")"),
+                    objectName, innerObjectName, innerObjectName)
             }
         }
         return builder.build()

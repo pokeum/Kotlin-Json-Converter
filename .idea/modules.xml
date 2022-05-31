@@ -4,8 +4,15 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Kotlin_Json_Converter.iml" filepath="$PROJECT_DIR$/.idea/modules/Kotlin_Json_Converter.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/annotation/Kotlin_Json_Converter.annotation.iml" filepath="$PROJECT_DIR$/.idea/modules/annotation/Kotlin_Json_Converter.annotation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/annotation/Kotlin_Json_Converter.annotation.main.iml" filepath="$PROJECT_DIR$/.idea/modules/annotation/Kotlin_Json_Converter.annotation.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/annotation/Kotlin_Json_Converter.annotation.test.iml" filepath="$PROJECT_DIR$/.idea/modules/annotation/Kotlin_Json_Converter.annotation.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Kotlin_Json_Converter.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Kotlin_Json_Converter.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Kotlin_Json_Converter.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Kotlin_Json_Converter.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Kotlin_Json_Converter.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Kotlin_Json_Converter.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Kotlin_Json_Converter.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Kotlin_Json_Converter.app.unitTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/codegen/Kotlin_Json_Converter.codegen.iml" filepath="$PROJECT_DIR$/.idea/modules/codegen/Kotlin_Json_Converter.codegen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/codegen/Kotlin_Json_Converter.codegen.main.iml" filepath="$PROJECT_DIR$/.idea/modules/codegen/Kotlin_Json_Converter.codegen.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/codegen/Kotlin_Json_Converter.codegen.test.iml" filepath="$PROJECT_DIR$/.idea/modules/codegen/Kotlin_Json_Converter.codegen.test.iml" />
     </modules>
   </component>
 </project>
