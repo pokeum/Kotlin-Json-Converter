@@ -1,4 +1,4 @@
-package com.example.kotlinjsonconverter.sample
+package com.example.kotlinjsonconverter.sample.test
 
 import com.example.annotation.SerialName
 import com.example.annotation.Serializable
@@ -65,10 +65,14 @@ data class PrimitiveTest(
     /** Add Collection */
     @JvmField
     @SerialName("Collection")
-    //val mCollection: Collection<Int?>?
-    val mCollection: List<Int?>?
-    //val mCollection: List<Int>?
+    //val mCollection: Collection<Int?>?,
+    val mCollection: List<Int?>?,
+    //val mCollection: List<Int>?,
 
+    /** Add Map */
+    @JvmField
+    @SerialName("Map")
+    val mMap: Map<String, Int?>?
 ) {
     override fun toString(): String {
         return """
@@ -91,7 +95,8 @@ data class PrimitiveTest(
                 mChar: '$mChar',
                 mNullableString: $mNullableString,
                 mString: "$mString",
-                mCollection: $mCollection
+                mCollection: $mCollection,
+                mMap: $mMap
             }
         """.trimIndent()
     }

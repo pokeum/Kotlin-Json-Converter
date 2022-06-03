@@ -6,10 +6,11 @@ import com.example.kotlinjsonconverter.generator.generate_FoodBrand_9Lives
 import com.example.kotlinjsonconverter.generator.generate_Person
 import com.example.kotlinjsonconverter.generator.generate_Pet_Cat
 import com.example.kotlinjsonconverter.sample.PetFood
-import com.example.kotlinjsonconverter.sample.PrimitiveTest
+import com.example.kotlinjsonconverter.sample.test.PrimitiveTest
 import com.example.kotlinjsonconverter.sample.stub.toFoodBrandObject
 import com.example.kotlinjsonconverter.sample.stub.toPetFoodObject
 import com.example.kotlinjsonconverter.sample.stub.toPrimitiveTestObject
+import com.example.kotlinjsonconverter.sample.test.toJSONObject
 import com.example.kotlinjsonconverter.sample.toJSONObject
 
 class JsonConverterTest {
@@ -66,7 +67,8 @@ class JsonConverterTest {
             null, true,
             null, 'A',
             null, "Add String Test",
-            listOf(1, 2, null, 3, 4)
+            listOf(1, 2, null, 3, 4),
+            mapOf("hello1" to 10, "hello2" to 20, "hello_none" to null)
         )
         println("===> JSONObject")
         val primitiveTestString = primitiveTest.toJSONObject().toString(4)

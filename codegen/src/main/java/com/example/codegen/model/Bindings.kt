@@ -2,6 +2,7 @@ package com.example.codegen.model
 
 import com.example.annotation.SerialName
 import com.example.annotation.Serializable
+import com.example.annotation.debug.Debug
 import com.example.codegen.ProcessingEnvUtils
 import com.example.codegen.commons.Logger
 import com.example.codegen.extension.getEnclosedFieldElements
@@ -14,7 +15,6 @@ import javax.tools.Diagnostic
 
 class Bindings {
 
-    // https://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/PackageElement.html
     private val packageBindingInfo = mutableMapOf<PackageElement, PackageBinding>()
 
     fun build(env: RoundEnvironment) {
@@ -26,9 +26,10 @@ class Bindings {
             }
             val packageElement = classElement.getPackage()
             val packageBinding = packageBindingInfo.computeIfAbsent(packageElement) { PackageBinding(packageElement) }
-            Logger.log(TAG, "package name : ${packageBinding.getPackageName()}")
             val classBinding = packageBinding.getClassBinding(classElement as TypeElement)
-            Logger.log(TAG, "serializable class name : ${classBinding.getSimpleName()}")
+            if (classElement.getAnnotation(Debug::class.java) != null) {
+                Logger.log(TAG, "serializable class name : ${classBinding.getSimpleName()}")
+            }
             val fieldElements = classElement.getEnclosedFieldElements()
             for (fieldElement in fieldElements) {
                 val annotation = fieldElement.getAnnotation(SerialName::class.java) ?: continue
@@ -39,7 +40,9 @@ class Bindings {
                 }
                 val fieldBinding = FieldBinding(fieldElement, annotation)
                 classBinding.addFieldBinding(fieldBinding)
-                Logger.log(TAG, "serialName field key : ${fieldBinding.getKeyName()} (${fieldBinding.getType()})")
+                if (fieldElement.getAnnotation(Debug::class.java) != null) {
+                    Logger.log(TAG, "serialName field key : ${fieldBinding.getKeyName()} (${fieldBinding.getType()})")
+                }
             }
         }
     }

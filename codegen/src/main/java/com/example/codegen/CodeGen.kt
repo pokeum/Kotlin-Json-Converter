@@ -1,7 +1,6 @@
 package com.example.codegen
 
 import com.example.annotation.Serializable
-import com.example.codegen.commons.Logger
 import com.example.codegen.commons.Primitive
 import com.example.codegen.extension.isExtendedBy
 import com.example.codegen.model.ClassBinding
@@ -77,8 +76,7 @@ object CodeGen {
                             "Nested class <${valueTypeElement.simpleName}> doesn't support @Serializable annotation",
                             fieldInfo.binding.fieldElement
                         )
-                    }
-                    builder.add(createToJSONObjectDefaultAndSerializableCodeBlock(fieldInfo))
+                    } else { builder.add(createToJSONObjectDefaultAndSerializableCodeBlock(fieldInfo)) }
                 }
             }
         }

@@ -2,7 +2,7 @@ package com.example.kotlinjsonconverter.sample.stub
 
 import com.example.kotlinjsonconverter.sample.FoodBrand
 import com.example.kotlinjsonconverter.sample.PetFood
-import com.example.kotlinjsonconverter.sample.PrimitiveTest
+import com.example.kotlinjsonconverter.sample.test.PrimitiveTest
 import org.json.JSONObject
 
 internal fun String.toFoodBrandObject(): FoodBrand {
@@ -46,6 +46,7 @@ internal fun String.toPrimitiveTestObject(): PrimitiveTest {
         obj.optString("String", null),
 
         // list or set ?
+        /** Collection */
         obj.optJSONArray("Collection")?.let {
             val objA = mutableListOf<Int?>()
             for (i in 0 until it.length()) {
@@ -53,6 +54,16 @@ internal fun String.toPrimitiveTestObject(): PrimitiveTest {
                     if (elem == JSONObject.NULL) null else elem.toString().toInt()
                 })
             }
+            objA
+        },
+
+        /** Map */
+        obj.optJSONObject("Map")?.let {
+            val objA = mapOf<String, Int?>(
+                "hello1" to it.opt("hello1")?.toString()?.toInt(),
+                "hello2" to it.opt("hello2")?.toString()?.toInt(),
+                "hello_none" to it.opt("hello_none")?.toString()?.toInt(),
+            )
             objA
         }
     )
