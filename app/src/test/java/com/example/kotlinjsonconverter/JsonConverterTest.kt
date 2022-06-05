@@ -9,6 +9,7 @@ import com.example.kotlinjsonconverter.sample.PetFood
 import com.example.kotlinjsonconverter.sample.test.PrimitiveTest
 import com.example.kotlinjsonconverter.sample.stub.toFoodBrandObject
 import com.example.kotlinjsonconverter.sample.stub.toPetFoodObject
+import com.example.kotlinjsonconverter.sample.stub.toPetObject
 import com.example.kotlinjsonconverter.sample.stub.toPrimitiveTestObject
 import com.example.kotlinjsonconverter.sample.test.toJSONObject
 import com.example.kotlinjsonconverter.sample.toJSONObject
@@ -30,11 +31,9 @@ class JsonConverterTest {
         val petJsonString = pet.toJSONObject().toString(4)
         println(petJsonString)
 
-        /*
         println("===> Pet")
         val petFoodObj = petJsonString.toPetObject()
         println(petFoodObj)
-         */
     }
 
     @Test

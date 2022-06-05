@@ -1,8 +1,10 @@
 package com.example.kotlinjsonconverter.sample.stub
 
 import com.example.kotlinjsonconverter.sample.FoodBrand
+import com.example.kotlinjsonconverter.sample.Pet
 import com.example.kotlinjsonconverter.sample.PetFood
 import com.example.kotlinjsonconverter.sample.test.PrimitiveTest
+import org.json.JSONArray
 import org.json.JSONObject
 
 internal fun String.toFoodBrandObject(): FoodBrand {
@@ -23,7 +25,6 @@ internal fun String.toPetFoodObject(): PetFood {
     )
 }
 
-/*
 internal fun String.toPetObject(): Pet {
     val obj = JSONObject(this)
     return Pet(
@@ -45,7 +46,7 @@ internal fun String.toPetObject(): Pet {
                             val objC = mutableListOf<String?>()
                             for (i in 0 until it.length()) {
                                 objC.add(it[i].let {
-                                    if (it == JSONObject.NULL) null else it.toString()
+                                    if (it == JSONObject.NULL) { null } else { it?.toString() }
                                 })
                             }
                             objC
@@ -56,7 +57,7 @@ internal fun String.toPetObject(): Pet {
             }
             objA
         })
-} */
+}
 
 internal fun String.toPrimitiveTestObject(): PrimitiveTest {
     val obj = JSONObject(this)
@@ -86,7 +87,7 @@ internal fun String.toPrimitiveTestObject(): PrimitiveTest {
             val objA = mutableListOf<Int?>()
             for (i in 0 until it.length()) {
                 objA.add(it[i].let {
-                    if (it == JSONObject.NULL) { null } else { it.toString().toInt() }
+                    if (it == JSONObject.NULL) { null } else { it?.toString()?.toInt() }
                 })
             }
             objA
@@ -95,9 +96,12 @@ internal fun String.toPrimitiveTestObject(): PrimitiveTest {
         /** Map */
         obj.optJSONObject("Map")?.let {
             val objA = mapOf<String, Int?>(
-                "hello1" to it.opt("hello1")?.toString()?.toInt(),
-                "hello2" to it.opt("hello2")?.toString()?.toInt(),
-                "hello_none" to it.opt("hello_none")?.toString()?.toInt(),
+                "hello1" to if (it.opt("hello1") == JSONObject.NULL) { null }
+                    else { it.opt("hello1")?.toString()?.toInt() },
+                "hello2" to if (it.opt("hello2") == JSONObject.NULL) { null }
+                    else { it.opt("hello2")?.toString()?.toInt() },
+                "hello_none" to if (it.opt("hello_none") == JSONObject.NULL) { null }
+                    else { it.opt("hello_none")?.toString()?.toInt() },
             )
             objA
         }
