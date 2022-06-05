@@ -1,5 +1,6 @@
 package com.example.codegen.commons
 
+import com.example.codegen.extension.isNullablePrimitive
 import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
 
@@ -15,12 +16,15 @@ class Primitive(private val typeMirror: TypeMirror) {
             typeMirror.toString() == Type.BOOLEAN.java ||
             typeMirror.toString() == Type.CHAR.java
 
-
-    enum class Kind { PRIMITIVE, NULLABLE }
-    fun toTypeFunc(kind: Kind) = when (kind) {
-        Kind.PRIMITIVE -> if (primitiveType() == "Char") { "get(0)" } else { "to${primitiveType()}()" }
-        Kind.NULLABLE -> if (nullableType() == "Char") { "get(0)" } else { "to${nullableType()}()" }
+    fun toTypeFunc(): String {
+        return if (typeMirror.isNullablePrimitive()) {
+            if (nullableType() == "Char") { "get(0)" } else { "to${nullableType()}()" }
+        } else {
+            if (primitiveType() == "Char") { "get(0)" } else { "to${primitiveType()}()" }
+        }
     }
+
+    fun toType() = if (typeMirror.isNullablePrimitive()) { "${nullableType()}?" } else { primitiveType() }
 
     private fun primitiveType() = when (typeMirror.kind) {
         TypeKind.BYTE -> Type.BYTE.kotlin

@@ -3,6 +3,7 @@ package com.example.codegen
 import com.example.annotation.Serializable
 import com.example.codegen.commons.Primitive
 import com.example.codegen.extension.isExtendedBy
+import com.example.codegen.extension.isNullablePrimitive
 import com.example.codegen.model.ClassBinding
 import com.example.codegen.model.FieldBinding
 import com.example.codegen.recursion.FieldInfo
@@ -25,7 +26,7 @@ object CodeGen {
             .addImport(JSON_OBJECT_CLASS_NAME.packageName, JSON_OBJECT_CLASS_NAME.simpleName)
             .addImport(JSON_ARRAY_CLASS_NAME.packageName, JSON_ARRAY_CLASS_NAME.simpleName)
             .addFunction(createToJSONObjectFunc(binding))
-        //.addFunction(createToClassObjectFunc(binding))
+            //.addFunction(createToClassObjectFunc(binding))
         return builder.build()
     }
 
@@ -151,10 +152,10 @@ object CodeGen {
         val builder = CodeBlock.builder()
         when {
             binding.isPrimitive() -> {
-                builder.addStatement("obj.opt(%S).toString().${Primitive(binding.getType()).toTypeFunc(Primitive.Kind.PRIMITIVE)},", binding.getKeyName())
+                builder.addStatement("obj.opt(%S).toString().${Primitive(binding.getType()).toTypeFunc()},", binding.getKeyName())
             }
             binding.isNullablePrimitive() -> {
-                builder.addStatement("obj.opt(%S)?.toString()?.${Primitive(binding.getType()).toTypeFunc(Primitive.Kind.NULLABLE)},", binding.getKeyName())
+                builder.addStatement("obj.opt(%S)?.toString()?.${Primitive(binding.getType()).toTypeFunc()},", binding.getKeyName())
             }
             binding.isDeclared() -> {
                 val declaredType = binding.getType() as DeclaredType
@@ -163,7 +164,11 @@ object CodeGen {
                         builder.addStatement("obj.optString(%S, null),", binding.getKeyName())  // String
                     }
                     binding.isExtendedBy(Collection::class.java) -> {
-
+                        val elementType = declaredType.typeArguments[0]
+                        // DEBUG
+                        if (elementType.kind.isPrimitive || elementType.isNullablePrimitive()) {
+                            println(Primitive(elementType).toType())
+                        }
                     }
                     binding.isExtendedBy(Map::class.java) -> {
 
