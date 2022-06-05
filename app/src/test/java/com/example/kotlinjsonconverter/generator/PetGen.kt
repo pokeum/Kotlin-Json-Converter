@@ -16,14 +16,9 @@ fun generate_Pet_Cat() = Pet(
     12.5,
     'F',
     listOf(
-        listOf(
-            listOf(generate_CatFood_A(), generate_CatFood_B()),
-            listOf(generate_CatFood_C(), null)
-        ),
-        listOf(
-            listOf(generate_CatFood_A(), generate_CatFood_B()),
-            listOf(generate_CatFood_C(), null)
-        )
+        null,
+        listOf("test 1", "test 2"),
+        listOf("test 3", null)
     )
 )
 

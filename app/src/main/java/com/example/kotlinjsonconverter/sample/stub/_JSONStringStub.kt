@@ -1,8 +1,10 @@
 package com.example.kotlinjsonconverter.sample.stub
 
 import com.example.kotlinjsonconverter.sample.FoodBrand
+import com.example.kotlinjsonconverter.sample.Pet
 import com.example.kotlinjsonconverter.sample.PetFood
 import com.example.kotlinjsonconverter.sample.test.PrimitiveTest
+import org.json.JSONArray
 import org.json.JSONObject
 
 internal fun String.toFoodBrandObject(): FoodBrand {
@@ -21,6 +23,40 @@ internal fun String.toPetFoodObject(): PetFood {
         obj.optString("label", null),
         obj.opt("price").toString().toFloat(),
     )
+}
+
+internal fun String.toPetObject(): Pet {
+    val obj = JSONObject(this)
+    return Pet(
+        obj.optString("type", null),
+        obj.optString("name", null),
+        obj.opt("mine")?.toString()?.toBoolean(),
+        obj.opt("weight")?.toString()?.toDouble(),
+        obj.opt("gender")?.toString()?.get(0),
+
+        //val foods: Collection<Collection<String?>?>?
+        obj.optJSONArray("foods")?.let {
+            val objA = mutableListOf<Collection<String?>?>()
+            for (i in 0 until it.length()) {
+                objA.add(it[i].let {
+                    if (it == JSONObject.NULL) {
+                        null
+                    } else {
+                        val objB = JSONArray(it.toString())?.let {
+                            val objC = mutableListOf<String?>()
+                            for (i in 0 until it.length()) {
+                                objC.add(it[i].let {
+                                    if (it == JSONObject.NULL) null else it.toString()
+                                })
+                            }
+                            objC
+                        }
+                        objB
+                    }
+                })
+            }
+            objA
+        })
 }
 
 internal fun String.toPrimitiveTestObject(): PrimitiveTest {
@@ -45,13 +81,13 @@ internal fun String.toPrimitiveTestObject(): PrimitiveTest {
         obj.optString("Nullable String", null),
         obj.optString("String", null),
 
-        // list or set ?
+        // list or set ???
         /** Collection */
         obj.optJSONArray("Collection")?.let {
             val objA = mutableListOf<Int?>()
             for (i in 0 until it.length()) {
-                objA.add(it[i].let { elem ->
-                    if (elem == JSONObject.NULL) null else elem.toString().toInt()
+                objA.add(it[i].let {
+                    if (it == JSONObject.NULL) { null } else { it.toString().toInt() }
                 })
             }
             objA
@@ -67,4 +103,32 @@ internal fun String.toPrimitiveTestObject(): PrimitiveTest {
             objA
         }
     )
+}
+
+/** fix null ignore */
+internal fun Pet.toJSONObject(): JSONObject {
+    val obj = JSONObject()
+    obj.put("type", type)
+    obj.put("name", name)
+    obj.put("mine", mine)
+    obj.put("weight", weight)
+    obj.put("gender", gender)
+    if (foods != null) {
+        val obj_0 = JSONArray()
+        for (obj_1 in foods!!) {
+            if (obj_1 != null) {
+                val obj_2 = JSONArray()
+                for (obj_3 in obj_1!!) {
+                    obj_2.put(obj_3)
+                }
+                obj_0.put(obj_2)
+            } else {
+                obj_0.put(null)
+            }
+        }
+        obj.put("foods", obj_0)
+    } else {
+        obj.put("foods", null)
+    }
+    return obj
 }

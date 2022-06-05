@@ -46,14 +46,13 @@ object CodeGen {
     private fun createToJSONObjectCodeBlock(fieldInfo: FieldInfo): CodeBlock {
         val builder = CodeBlock.builder()
         if (fieldInfo.isPrimitiveOrCharSequence()) {
-            builder.add(createToJSONObjectDefaultAndSerializableCodeBlock(fieldInfo))
+            builder.add(createToJSONObjectRecursionCodeBlock(fieldInfo))
         } else if (fieldInfo.currentType.kind.equals(TypeKind.DECLARED)) {
             val declaredType = fieldInfo.currentType as DeclaredType
             when {
                 fieldInfo.currentType.isExtendedBy(Collection::class.java) -> {
                     val elementType = declaredType.typeArguments[0]
-                    builder.add(createToJSONObjectMapAndCollectionCodeBlock(
-                        fieldInfo, elementType, true))
+                    builder.add(createToJSONObjectRecursionCodeBlock(fieldInfo, elementType, true))
                 }
                 fieldInfo.currentType.isExtendedBy(Map::class.java) -> {
                     val keyType = declaredType.typeArguments[0]
@@ -65,8 +64,7 @@ object CodeGen {
                         )
                     }
                     val valueType = declaredType.typeArguments[1]
-                    builder.add(createToJSONObjectMapAndCollectionCodeBlock(
-                        fieldInfo, valueType, false))
+                    builder.add(createToJSONObjectRecursionCodeBlock(fieldInfo, valueType, false))
                 }
                 else -> {
                     val valueTypeElement = declaredType.asElement()
@@ -77,14 +75,15 @@ object CodeGen {
                             "Nested class <${valueTypeElement.simpleName}> doesn't support @Serializable annotation",
                             fieldInfo.binding.fieldElement
                         )
-                    } else { builder.add(createToJSONObjectDefaultAndSerializableCodeBlock(fieldInfo)) }
+                    } else { builder.add(createToJSONObjectRecursionCodeBlock(fieldInfo)) }
                 }
             }
         }
         return builder.build()
     }
 
-    private fun createToJSONObjectMapAndCollectionCodeBlock(
+    /** [create code block] ToJSONObject : Map and Collection */
+    private fun createToJSONObjectRecursionCodeBlock(
         fieldInfo: FieldInfo, nestedType: TypeMirror, isOuterTypeCollection: Boolean): CodeBlock {
         val builder = CodeBlock.builder()
         val objectName = fieldInfo.generateObjectName()
@@ -107,7 +106,8 @@ object CodeGen {
         return builder.build()
     }
 
-    private fun createToJSONObjectDefaultAndSerializableCodeBlock(fieldInfo: FieldInfo): CodeBlock {
+    /** [create code block] ToJSONObject : Primitive, CharSequence and Serializable */
+    private fun createToJSONObjectRecursionCodeBlock(fieldInfo: FieldInfo): CodeBlock {
 
         fun format(pre: String, post: String): String {
             val formatSB = StringBuilder()

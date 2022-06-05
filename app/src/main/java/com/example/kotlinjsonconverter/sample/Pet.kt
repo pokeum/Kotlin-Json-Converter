@@ -31,6 +31,6 @@ data class Pet(
     //val foods: Collection<Map<String, PetFood?>?>?
     //val foods: Collection<Map<String, String?>?>?
     //val foods: Collection<Collection<PetFood?>?>?
-    //val foods: Collection<Collection<String?>?>?
-    val foods: Collection<Collection<Collection<PetFood?>?>?>?
+    val foods: Collection<Collection<String?>?>?
+    //val foods: Collection<Collection<Collection<PetFood?>?>?>?
 )
