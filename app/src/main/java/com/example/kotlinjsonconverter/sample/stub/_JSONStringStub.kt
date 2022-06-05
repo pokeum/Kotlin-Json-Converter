@@ -1,10 +1,8 @@
 package com.example.kotlinjsonconverter.sample.stub
 
 import com.example.kotlinjsonconverter.sample.FoodBrand
-import com.example.kotlinjsonconverter.sample.Pet
 import com.example.kotlinjsonconverter.sample.PetFood
 import com.example.kotlinjsonconverter.sample.test.PrimitiveTest
-import org.json.JSONArray
 import org.json.JSONObject
 
 internal fun String.toFoodBrandObject(): FoodBrand {
@@ -25,6 +23,7 @@ internal fun String.toPetFoodObject(): PetFood {
     )
 }
 
+/*
 internal fun String.toPetObject(): Pet {
     val obj = JSONObject(this)
     return Pet(
@@ -57,7 +56,7 @@ internal fun String.toPetObject(): Pet {
             }
             objA
         })
-}
+} */
 
 internal fun String.toPrimitiveTestObject(): PrimitiveTest {
     val obj = JSONObject(this)
@@ -103,32 +102,4 @@ internal fun String.toPrimitiveTestObject(): PrimitiveTest {
             objA
         }
     )
-}
-
-/** fix null ignore */
-internal fun Pet.toJSONObject(): JSONObject {
-    val obj = JSONObject()
-    obj.put("type", type)
-    obj.put("name", name)
-    obj.put("mine", mine)
-    obj.put("weight", weight)
-    obj.put("gender", gender)
-    if (foods != null) {
-        val obj_0 = JSONArray()
-        for (obj_1 in foods!!) {
-            if (obj_1 != null) {
-                val obj_2 = JSONArray()
-                for (obj_3 in obj_1!!) {
-                    obj_2.put(obj_3)
-                }
-                obj_0.put(obj_2)
-            } else {
-                obj_0.put(null)
-            }
-        }
-        obj.put("foods", obj_0)
-    } else {
-        obj.put("foods", null)
-    }
-    return obj
 }

@@ -20,6 +20,7 @@ object CodeGen {
     private val JSON_OBJECT_CLASS_NAME = JSONObject::class.asClassName()
     private val JSON_ARRAY_CLASS_NAME = JSONArray::class.asClassName()
     private const val TO_JSON_OBJECT_FUN_NAME = "toJSONObject"
+    private const val JSON_OBJECT_NULL = "JSONObject.NULL"
 
     fun createFileSpec(packageName: String, binding: ClassBinding): FileSpec {
         val builder = FileSpec.builder(packageName, "${binding.getSimpleName()}Stub")
@@ -103,6 +104,17 @@ object CodeGen {
                 fieldInfo.parentJsonObject, fieldInfo.key, objectName)
         }
         builder.endControlFlow()
+
+        /* fix null ignore */
+        builder.beginControlFlow("else")
+        if (fieldInfo.isOuterTypeCollection()) {
+            builder.addStatement("%L.put(${JSON_OBJECT_NULL})", fieldInfo.parentJsonObject)
+        } else {
+            builder.addStatement("%L.put(${if (fieldInfo.isFirst) "%S" else "%L"}, ${JSON_OBJECT_NULL})",
+                fieldInfo.parentJsonObject, fieldInfo.key)
+        }
+        builder.endControlFlow()
+
         return builder.build()
     }
 
@@ -129,7 +141,8 @@ object CodeGen {
             if (fieldInfo.isOuterTypeCollection()) {
                 builder.addStatement(format("%L.put(%L", ")"), objectName, innerObjectName)
             } else {
-                builder.addStatement(format("%L.put(%L.key, %L.value", ")"),
+                /* fix null ignore */
+                builder.addStatement(format("%L.put(%L.key, %L.value", " ?: ${JSON_OBJECT_NULL})"),
                     objectName, innerObjectName, innerObjectName)
             }
         }
