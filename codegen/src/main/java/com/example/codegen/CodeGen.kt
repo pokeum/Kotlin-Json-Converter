@@ -17,6 +17,8 @@ import javax.tools.Diagnostic
 
 object CodeGen {
 
+    private const val SERIALIZE_NULL = false
+
     private val JSON_OBJECT_CLASS_NAME = JSONObject::class.asClassName()
     private val JSON_ARRAY_CLASS_NAME = JSONArray::class.asClassName()
     private const val TO_JSON_OBJECT_FUN_NAME = "toJSONObject"
@@ -105,15 +107,16 @@ object CodeGen {
         }
         builder.endControlFlow()
 
-        /* fix null ignore */
-        builder.beginControlFlow("else")
-        if (fieldInfo.isOuterTypeCollection()) {
-            builder.addStatement("%L.put(${JSON_OBJECT_NULL})", fieldInfo.parentJsonObject)
-        } else {
-            builder.addStatement("%L.put(${if (fieldInfo.isFirst) "%S" else "%L"}, ${JSON_OBJECT_NULL})",
-                fieldInfo.parentJsonObject, fieldInfo.key)
+        if (SERIALIZE_NULL || fieldInfo.isOuterTypeCollection()) {
+            builder.beginControlFlow("else")
+            if (fieldInfo.isOuterTypeCollection()) {
+                builder.addStatement("%L.put(${JSON_OBJECT_NULL})", fieldInfo.parentJsonObject)
+            } else {
+                builder.addStatement("%L.put(${if (fieldInfo.isFirst) "%S" else "%L"}, ${JSON_OBJECT_NULL})",
+                    fieldInfo.parentJsonObject, fieldInfo.key)
+            }
+            builder.endControlFlow()
         }
-        builder.endControlFlow()
 
         return builder.build()
     }
@@ -127,6 +130,7 @@ object CodeGen {
             if (!fieldInfo.isPrimitiveOrCharSequence()) {
                 formatSB.append("?.${TO_JSON_OBJECT_FUN_NAME}()")
             }
+            if (SERIALIZE_NULL) { formatSB.append(" ?: $JSON_OBJECT_NULL") }
             formatSB.append(post)
             return formatSB.toString()
         }
@@ -141,8 +145,7 @@ object CodeGen {
             if (fieldInfo.isOuterTypeCollection()) {
                 builder.addStatement(format("%L.put(%L", ")"), objectName, innerObjectName)
             } else {
-                /* fix null ignore */
-                builder.addStatement(format("%L.put(%L.key, %L.value", " ?: ${JSON_OBJECT_NULL})"),
+                builder.addStatement(format("%L.put(%L.key, %L.value", ")"),
                     objectName, innerObjectName, innerObjectName)
             }
         }

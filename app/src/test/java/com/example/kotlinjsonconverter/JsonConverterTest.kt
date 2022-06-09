@@ -1,6 +1,7 @@
 package com.example.kotlinjsonconverter
 
 import org.junit.Test
+import org.junit.Assert.assertEquals
 
 import com.example.kotlinjsonconverter.generator.generate_FoodBrand_9Lives
 import com.example.kotlinjsonconverter.generator.generate_Person
@@ -13,6 +14,7 @@ import com.example.kotlinjsonconverter.sample.stub.toPetObject
 import com.example.kotlinjsonconverter.sample.stub.toPrimitiveTestObject
 import com.example.kotlinjsonconverter.sample.test.toJSONObject
 import com.example.kotlinjsonconverter.sample.toJSONObject
+import com.google.gson.Gson
 
 class JsonConverterTest {
 
@@ -22,6 +24,10 @@ class JsonConverterTest {
         val person = generate_Person()
         val personJsonString = person.toJSONObject().toString(4)
         println(personJsonString)
+
+        println("===> GSON")
+        val personGsonString = Gson().toJson(person)
+        println(personGsonString)
     }
 
     @Test
@@ -31,9 +37,15 @@ class JsonConverterTest {
         val petJsonString = pet.toJSONObject().toString(4)
         println(petJsonString)
 
+        println("===> GSON")
+        val petGsonString = Gson().toJson(pet)
+        println(petGsonString)
+
         println("===> Pet")
-        val petFoodObj = petJsonString.toPetObject()
-        println(petFoodObj)
+        val petObj = petJsonString.toPetObject()
+        println(petObj)
+
+        assertEquals(pet, petObj)
     }
 
     @Test
@@ -79,8 +91,14 @@ class JsonConverterTest {
         val primitiveTestString = primitiveTest.toJSONObject().toString(4)
         println(primitiveTestString)
 
+        println("===> GSON")
+        val primitiveTestGsonString = Gson().toJson(primitiveTest)
+        println(primitiveTestGsonString)
+
         println("===> PrimitiveTest")
         val primitiveTestObj = primitiveTestString.toPrimitiveTestObject()
         println(primitiveTestObj)
+
+        assertEquals(primitiveTest, primitiveTestObj)
     }
 }

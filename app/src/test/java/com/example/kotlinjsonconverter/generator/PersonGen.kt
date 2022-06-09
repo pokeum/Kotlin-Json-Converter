@@ -18,5 +18,4 @@ fun generate_Person() = Person(
         "None" to generate_Pet_None(),
         "Null" to null),
     listOf(1, 2, 3, null, 5, 6, 7)
-    //Person.Gender.MALE
 )

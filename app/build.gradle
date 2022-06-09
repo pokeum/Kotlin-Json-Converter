@@ -52,4 +52,6 @@ dependencies {
 
     // [Fix] Method put in org.json.JSONObject not mocked.
     testImplementation 'org.json:json:20210307'
+
+    implementation 'com.google.code.gson:gson:2.9.0'
 }

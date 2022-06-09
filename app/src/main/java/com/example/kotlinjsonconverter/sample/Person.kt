@@ -31,11 +31,4 @@ data class Person(
     @JvmField
     @SerialName("card deck")
     val cardDeck: Collection<Int?>
-
-    //val gender: Gender
-) {
-    /** static 클래스이므로 동작하지 않는다.
-    @Serializable
-    enum class Gender { MALE, FEMALE }
-    */
-}
+)
