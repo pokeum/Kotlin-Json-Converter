@@ -35,7 +35,7 @@ class Primitive(private val typeMirror: TypeMirror) {
         TypeKind.DOUBLE -> Type.DOUBLE.kotlin
         TypeKind.BOOLEAN -> Type.BOOLEAN.kotlin
         TypeKind.CHAR -> Type.CHAR.kotlin
-        else -> throw RuntimeException("A failure occurred while executing ${Primitive::class.qualifiedName} - typeString()")
+        else -> throw RuntimeException("Invalid TypeKind: ${typeMirror.kind}")
     }
 
     private fun nullableType() = when (typeMirror.toString()) {
@@ -47,7 +47,7 @@ class Primitive(private val typeMirror: TypeMirror) {
         Type.DOUBLE.java -> Type.DOUBLE.kotlin
         Type.BOOLEAN.java -> Type.BOOLEAN.kotlin
         Type.CHAR.java -> Type.CHAR.kotlin
-        else -> throw RuntimeException("A failure occurred while executing ${Primitive::class.qualifiedName} - nullableTypeString()")
+        else -> throw RuntimeException("Invalid Type: $typeMirror")
     }
 
     enum class Type(val kotlin: String, val java: String) {
