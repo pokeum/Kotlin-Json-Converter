@@ -1,6 +1,6 @@
-package com.example.kotlinjsonconverter.generator
+package com.example.kotlinjsonconverter.codegen_test.generator
 
-import com.example.kotlinjsonconverter.sample.Pet
+import com.example.kotlinjsonconverter.codegen_sample.Pet
 
 fun generate_Simple_Pets(): Map<String, String?> = mapOf(
     "Cat" to "Meow",
@@ -15,11 +15,7 @@ fun generate_Pet_Cat() = Pet(
     true,
     12.5,
     'F',
-    listOf(
-        listOf("test 1", "test 2"),
-        listOf("test 3", null),
-        null
-    )
+    listOf(listOf("test 1", "test 2"), listOf("test 3", null), null)
 )
 
 fun generate_Pet_Alligator() = Pet(

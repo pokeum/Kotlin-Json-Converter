@@ -1,4 +1,4 @@
-package com.example.kotlinjsonconverter.sample
+package com.example.kotlinjsonconverter.codegen_sample
 
 import com.example.annotation.SerialName
 import com.example.annotation.Serializable
@@ -15,7 +15,5 @@ data class PetFood(
     @SerialName("price")
     val price: Float
 ) {
-    override fun toString(): String {
-        return "{brand: $brand, label: $label, price: $price}"
-    }
+    override fun toString() = "{brand: $brand, label: $label, price: $price}"
 }

@@ -1,6 +1,6 @@
-package com.example.kotlinjsonconverter.generator
+package com.example.kotlinjsonconverter.codegen_test.generator
 
-import com.example.kotlinjsonconverter.sample.Person
+import com.example.kotlinjsonconverter.codegen_sample.Person
 
 fun generate_Person() = Person(
     "GilDong",

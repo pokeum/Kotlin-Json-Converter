@@ -1,4 +1,4 @@
-package com.example.kotlinjsonconverter.sample
+package com.example.kotlinjsonconverter.codegen_sample
 
 import com.example.annotation.SerialName
 import com.example.annotation.Serializable
@@ -15,7 +15,5 @@ data class FoodBrand(
     @SerialName("founding year")
     val year: Int?
 ) {
-    override fun toString(): String {
-        return "{company: $company, owner: $owner, year: $year}"
-    }
+    override fun toString() = "{company: $company, owner: $owner, year: $year}"
 }

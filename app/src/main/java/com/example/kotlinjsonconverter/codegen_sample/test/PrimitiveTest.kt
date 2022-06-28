@@ -1,4 +1,4 @@
-package com.example.kotlinjsonconverter.sample.test
+package com.example.kotlinjsonconverter.codegen_sample.test
 
 import com.example.annotation.SerialName
 import com.example.annotation.Serializable
@@ -67,7 +67,6 @@ data class PrimitiveTest(
     @SerialName("Collection")
     //val mCollection: Collection<Int?>?,
     val mCollection: List<Int?>?,
-    //val mCollection: List<Int>?,
 
     /** Add Map */
     @JvmField

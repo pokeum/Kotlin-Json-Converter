@@ -2,3 +2,4 @@ rootProject.name = "Kotlin Json Converter"
 include ':app'
 include ':annotation'
 include ':codegen'
+include ':abson'

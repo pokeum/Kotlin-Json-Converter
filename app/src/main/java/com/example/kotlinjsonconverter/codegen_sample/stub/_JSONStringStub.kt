@@ -1,18 +1,22 @@
-package com.example.kotlinjsonconverter.sample.stub
+package com.example.kotlinjsonconverter.codegen_sample.stub
 
-import com.example.kotlinjsonconverter.sample.FoodBrand
-import com.example.kotlinjsonconverter.sample.Pet
-import com.example.kotlinjsonconverter.sample.PetFood
-import com.example.kotlinjsonconverter.sample.test.PrimitiveTest
+import com.example.kotlinjsonconverter.codegen_sample.FoodBrand
+import com.example.kotlinjsonconverter.codegen_sample.Pet
+import com.example.kotlinjsonconverter.codegen_sample.PetFood
+import com.example.kotlinjsonconverter.codegen_sample.test.PrimitiveTest
 import org.json.JSONArray
 import org.json.JSONObject
 
+// SERIALIZE_NULL = true 인 경우
+fun Any.toStringNullCheck(): String? = if (this.equals(null)) null else this.toString()
+
 internal fun String.toFoodBrandObject(): FoodBrand {
     val obj = JSONObject(this)
+
     return FoodBrand(
         obj.optString("company", null),
         obj.optString("owner", null),
-        obj.opt("founding year")?.toString()?.toInt(),
+        obj.opt("founding year")?.toStringNullCheck()?.toInt(),
     )
 }
 
@@ -30,9 +34,9 @@ internal fun String.toPetObject(): Pet {
     return Pet(
         obj.optString("type", null),
         obj.optString("name", null),
-        obj.opt("mine")?.toString()?.toBoolean(),
-        obj.opt("weight")?.toString()?.toDouble(),
-        obj.opt("gender")?.toString()?.get(0),
+        obj.opt("mine")?.toStringNullCheck()?.toBoolean(),
+        obj.opt("weight")?.toStringNullCheck()?.toDouble(),
+        obj.opt("gender")?.toStringNullCheck()?.get(0),
 
         //val foods: Collection<Collection<String?>?>?
         obj.optJSONArray("foods")?.let {
@@ -42,11 +46,11 @@ internal fun String.toPetObject(): Pet {
                     if (it == JSONObject.NULL) {
                         null
                     } else {
-                        val objB = JSONArray(it.toString())?.let {
+                        val objB = JSONArray(it.toStringNullCheck())?.let {
                             val objC = mutableListOf<String?>()
                             for (i in 0 until it.length()) {
                                 objC.add(it[i].let {
-                                    if (it == JSONObject.NULL) { null } else { it?.toString() }
+                                    if (it == JSONObject.NULL) { null } else { it?.toStringNullCheck() }
                                 })
                             }
                             objC
@@ -62,21 +66,21 @@ internal fun String.toPetObject(): Pet {
 internal fun String.toPrimitiveTestObject(): PrimitiveTest {
     val obj = JSONObject(this)
     return PrimitiveTest(
-        obj.opt("Nullable Byte")?.toString()?.toByte(),
+        obj.opt("Nullable Byte")?.toStringNullCheck()?.toByte(),
         obj.opt("Byte").toString().toByte(),
-        obj.opt("Nullable Short")?.toString()?.toShort(),
+        obj.opt("Nullable Short")?.toStringNullCheck()?.toShort(),
         obj.opt("Short").toString().toShort(),
-        obj.opt("Nullable Int")?.toString()?.toInt(),
+        obj.opt("Nullable Int")?.toStringNullCheck()?.toInt(),
         obj.opt("Int").toString().toInt(),
-        obj.opt("Nullable Long")?.toString()?.toLong(),
+        obj.opt("Nullable Long")?.toStringNullCheck()?.toLong(),
         obj.opt("Long").toString().toLong(),
-        obj.opt("Nullable Float")?.toString()?.toFloat(),
+        obj.opt("Nullable Float")?.toStringNullCheck()?.toFloat(),
         obj.opt("Float").toString().toFloat(),
-        obj.opt("Nullable Double")?.toString()?.toDouble(),
+        obj.opt("Nullable Double")?.toStringNullCheck()?.toDouble(),
         obj.opt("Double").toString().toDouble(),
-        obj.opt("Nullable Boolean")?.toString()?.toBoolean(),
+        obj.opt("Nullable Boolean")?.toStringNullCheck()?.toBoolean(),
         obj.opt("Boolean").toString().toBoolean(),
-        obj.opt("Nullable Char")?.toString()?.get(0),
+        obj.opt("Nullable Char")?.toStringNullCheck()?.get(0),
         obj.opt("Char").toString().get(0),
         obj.optString("Nullable String", null),
         obj.optString("String", null),

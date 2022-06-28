@@ -1,6 +1,6 @@
-package com.example.kotlinjsonconverter.generator
+package com.example.kotlinjsonconverter.codegen_test.generator
 
-import com.example.kotlinjsonconverter.sample.PetFood
+import com.example.kotlinjsonconverter.codegen_sample.PetFood
 
 fun generate_CatFood_A() = PetFood(
     generate_FoodBrand_9Lives(),

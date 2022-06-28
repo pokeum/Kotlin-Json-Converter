@@ -14,9 +14,8 @@ class FieldInfo(
     val isFirst: Boolean,
     private var objectID: Int
 ) {
-    constructor(binding: FieldBinding) : this(binding, binding.getType(),
-        binding.getFieldName(), "obj", binding.getKeyName(),
-        true, 0)
+    constructor(binding: FieldBinding) : this(binding, binding.getType(), binding.getFieldName(),
+        "obj", binding.getKeyName(), true, 0)
 
     fun generateObjectName() = "obj_${objectID ++}"
     fun getObjectID() = objectID
@@ -38,8 +37,6 @@ class FieldInfo(
             iterableObject = "obj_${objectID - 1}.value"
             key = "obj_${objectID - 1}.key"
         }
-        return FieldInfo(binding, nestedType,
-            iterableObject, parentJsonObject, key,
-            false, objectID)
+        return FieldInfo(binding, nestedType, iterableObject, parentJsonObject, key, false, objectID)
     }
 }

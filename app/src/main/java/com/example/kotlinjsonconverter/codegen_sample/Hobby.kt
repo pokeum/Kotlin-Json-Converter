@@ -1,4 +1,4 @@
-package com.example.kotlinjsonconverter.sample
+package com.example.kotlinjsonconverter.codegen_sample
 
 import com.example.annotation.SerialName
 import com.example.annotation.Serializable

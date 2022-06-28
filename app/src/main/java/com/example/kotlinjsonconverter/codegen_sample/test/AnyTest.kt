@@ -1,8 +1,4 @@
-package com.example.kotlinjsonconverter.sample.test
-
-import com.example.annotation.Serializable
-import com.example.annotation.SerialName
-import com.example.annotation.debug.Debug
+package com.example.kotlinjsonconverter.codegen_sample.test
 
 //@Debug @Serializable
 data class AnyTest(
