@@ -42,6 +42,7 @@ private fun StringBuilder.serializePropertyValue(value: Any?) {
     when (value) {
         null -> append("null")
         is String -> serializeString(value)
+        is Char -> append("\"${value.escape()}\"")
         is Number, is Boolean -> append(value.toString())
         is List<*> -> serializeList(value)
         is Map<*, *> -> serializeMap(value)

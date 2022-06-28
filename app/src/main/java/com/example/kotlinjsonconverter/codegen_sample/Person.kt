@@ -23,11 +23,9 @@ data class Person(
     @JvmField
     @SerialName("simple_pets")
     val simplePets: Map<String, String?>,
-    //val simplePets: Map<String, Any?>,
     @JvmField
     @SerialName("pets")
     val pets: Map<String, Pet?>,
-    //val pets: Map<String, Any?>,
     @JvmField
     @SerialName("card deck")
     val cardDeck: Collection<Int?>
