@@ -6,7 +6,7 @@ import org.junit.Assert.assertEquals
 import com.example.kotlinjsonconverter.codegen_sample.test.PrimitiveTest
 import com.example.kotlinjsonconverter.codegen_sample.stub.toPrimitiveTestObject
 import com.example.kotlinjsonconverter.codegen_sample.test.toJSONObject
-import com.google.gson.GsonBuilder
+import com.google.gson.Gson
 
 class JsonConverterTest {
 
@@ -28,16 +28,9 @@ class JsonConverterTest {
         )
 
         /** Serialization */
-
-        println("===> JSONObject")
         val primitiveTestString = primitiveTest.toJSONObject().toString(4)
         println(primitiveTestString)
-
-        println("===> GSON")
-        val primitiveTestGsonString = GsonBuilder()
-            .setPrettyPrinting()
-            .create().toJson(primitiveTest)
-        println(primitiveTestGsonString)
+        assertEquals(primitiveTest, Gson().fromJson(primitiveTestString, PrimitiveTest::class.java))
 
         /** Deserialization */
         val primitiveTestObj = primitiveTestString.toPrimitiveTestObject()

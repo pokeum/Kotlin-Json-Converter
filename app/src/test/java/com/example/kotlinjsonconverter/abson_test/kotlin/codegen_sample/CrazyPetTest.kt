@@ -14,9 +14,6 @@ class CrazyPetTest {
 
         val crazyPet = generate_CrazyPet_Cat()
         val crazyPetJsonString = serialize(crazyPet)
-        Assert.assertEquals(
-            crazyPet,
-            Gson().fromJson(crazyPetJsonString, CrazyPet::class.java)
-        )
+        Assert.assertEquals(crazyPet, Gson().fromJson(crazyPetJsonString, CrazyPet::class.java))
     }
 }

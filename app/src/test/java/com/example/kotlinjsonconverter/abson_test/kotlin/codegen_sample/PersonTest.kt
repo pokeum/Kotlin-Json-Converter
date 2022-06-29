@@ -1,7 +1,7 @@
-package com.example.kotlinjsonconverter.codegen_test
+package com.example.kotlinjsonconverter.abson_test.kotlin.codegen_sample
 
+import co.ab180.abson.serialization.serialize
 import com.example.kotlinjsonconverter.codegen_sample.Person
-import com.example.kotlinjsonconverter.codegen_sample.toJSONObject
 import com.example.kotlinjsonconverter.codegen_test.generator.generate_Person
 import com.google.gson.Gson
 import org.junit.Assert
@@ -13,8 +13,7 @@ class PersonTest {
     fun test_serialization() {
 
         val person = generate_Person()
-        val personJsonString = person.toJSONObject().toString(4)
-        println(personJsonString)
+        val personJsonString = serialize(person)
         Assert.assertEquals(person, Gson().fromJson(personJsonString, Person::class.java))
     }
 }

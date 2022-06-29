@@ -27,9 +27,6 @@ class JsonConverterTest {
 
         /** Serialization */
         val primitiveTestJsonString = serialize(primitiveTest)
-        Assert.assertEquals(
-            primitiveTest,
-            Gson().fromJson(primitiveTestJsonString, PrimitiveTest::class.java)
-        )
+        Assert.assertEquals(primitiveTest, Gson().fromJson(primitiveTestJsonString, PrimitiveTest::class.java))
     }
 }

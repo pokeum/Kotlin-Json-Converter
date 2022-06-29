@@ -1,5 +1,6 @@
 package com.example.kotlinjsonconverter.codegen_test
 
+import com.example.kotlinjsonconverter.codegen_sample.Pet
 import com.example.kotlinjsonconverter.codegen_sample.stub.toPetObject
 import com.example.kotlinjsonconverter.codegen_sample.toJSONObject
 import com.example.kotlinjsonconverter.codegen_test.generator.generate_Pet_Cat
@@ -13,15 +14,10 @@ class PetTest {
     fun test() {
 
         /** Serialization */
-
-        println("===> JSONObject")
         val pet = generate_Pet_Cat()
-        val petJsonString = pet.toJSONObject().toString()
+        val petJsonString = pet.toJSONObject().toString(4)
         println(petJsonString)
-
-        println("===> GSON")
-        val petGsonString = Gson().toJson(pet)
-        println(petGsonString)
+        Assert.assertEquals(pet, Gson().fromJson(petJsonString, Pet::class.java))
 
         /** Deserialization */
         val petObj = petJsonString.toPetObject()

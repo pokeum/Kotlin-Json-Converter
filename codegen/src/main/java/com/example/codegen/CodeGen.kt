@@ -17,7 +17,7 @@ import javax.tools.Diagnostic
 
 object CodeGen {
 
-    private const val SERIALIZE_NULL = false
+    private const val SERIALIZE_NULL = true
 
     private val JSON_OBJECT_CLASS_NAME = JSONObject::class.asClassName()
     private val JSON_ARRAY_CLASS_NAME = JSONArray::class.asClassName()
