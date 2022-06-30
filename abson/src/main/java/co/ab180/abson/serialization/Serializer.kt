@@ -17,12 +17,11 @@ private fun StringBuilder.serializeObject(obj: Any) {
 }
 
 private fun StringBuilder.serializeProperty(prop: KProperty1<Any, *>, obj: Any) {
+    prop.isAccessible = true
+
     val name = prop.findAnnotation<JsonName>()?.value ?: prop.name
     serializeString(name)
     append(": ")
-
-    // Allow access to private property
-    prop.isAccessible = true
 
     val value = prop.get(obj)
     val jsonValue = prop.getSerializer()?.toJsonValue(value) ?: value
