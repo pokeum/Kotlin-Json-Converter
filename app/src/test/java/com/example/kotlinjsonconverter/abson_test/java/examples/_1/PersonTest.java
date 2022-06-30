@@ -6,6 +6,8 @@ import static co.ab180.abson.serialization.SerializerKt.serialize;
 
 import org.junit.Test;
 
+import co.ab180.abson.Abson;
+
 public class PersonTest {
 
     @Test
@@ -14,5 +16,6 @@ public class PersonTest {
         String json = "{\"Name\": \"Alice\", \"Age\": 29}";
 
         assertEquals(json, serialize(person));
+        assertEquals(json, new Abson().toJson(person));
     }
 }
