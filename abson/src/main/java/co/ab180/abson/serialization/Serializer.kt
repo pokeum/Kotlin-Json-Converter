@@ -6,7 +6,7 @@ import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
-fun serialize(obj: Any): String? = if (obj == null) null else buildString { serializeObject(obj) }
+fun serialize(obj: Any?): String = if (obj == null) "null" else buildString { serializeObject(obj) }
 
 private fun StringBuilder.serializeObject(obj: Any) {
     obj.javaClass.kotlin.memberProperties
