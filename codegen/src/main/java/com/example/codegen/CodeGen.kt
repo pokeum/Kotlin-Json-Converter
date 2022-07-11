@@ -23,6 +23,7 @@ object CodeGen {
     private val JSON_ARRAY_CLASS_NAME = JSONArray::class.asClassName()
     private const val TO_JSON_OBJECT_FUN_NAME = "toJSONObject"
     private const val JSON_OBJECT_NULL = "JSONObject.NULL"
+    private const val SERIALIZE_NULL_TO_STRING_FUN_NAME = "serializeNullToString"
 
     fun createFileSpec(packageName: String, binding: ClassBinding): FileSpec {
         val builder = FileSpec.builder(packageName, "${binding.getSimpleName()}Stub")
@@ -157,6 +158,7 @@ object CodeGen {
             .addModifiers(KModifier.INTERNAL)
             .receiver(String::class)
             .returns(binding.getClassName())
+            .addStatement(serializeNullToStringFuncStatement())
             .addStatement("val obj = %L(this)", JSON_OBJECT_CLASS_NAME.simpleName)
             .addStatement("return %L(", binding.getSimpleName())
         binding.getFieldBindings().forEach { builder.addCode(createToClassObjectCodeBlock(it)) }
@@ -171,7 +173,7 @@ object CodeGen {
                 builder.addStatement("obj.opt(%S).toString().${Primitive(binding.getType()).toTypeFunc()},", binding.getKeyName())
             }
             binding.isNullablePrimitive() -> {
-                builder.addStatement("obj.opt(%S)?.toString()?.${Primitive(binding.getType()).toTypeFunc()},", binding.getKeyName())
+                builder.addStatement("obj.opt(%S)?.$SERIALIZE_NULL_TO_STRING_FUN_NAME()?.${Primitive(binding.getType()).toTypeFunc()},", binding.getKeyName())
             }
             binding.isDeclared() -> {
                 val declaredType = binding.getType() as DeclaredType
@@ -201,5 +203,9 @@ object CodeGen {
             }
         }
         return builder.build()
+    }
+
+    private fun serializeNullToStringFuncStatement(): String {
+        return "fun Any.$SERIALIZE_NULL_TO_STRING_FUN_NAME(): String? = if (this.equals(null)) null else this.toString()";
     }
 }

@@ -7,16 +7,15 @@ import com.example.kotlinjsonconverter.codegen_sample.test.PrimitiveTest
 import org.json.JSONArray
 import org.json.JSONObject
 
-// SERIALIZE_NULL = true 인 경우
-fun Any.toStringNullCheck(): String? = if (this.equals(null)) null else this.toString()
+// SERIALIZE_NULL = true 인 경우 (null 값이 "null"로 존재하는 경우 처리)
+fun Any.serializeNullToString(): String? = if (this.equals(null)) null else this.toString()
 
 internal fun String.toFoodBrandObject(): FoodBrand {
     val obj = JSONObject(this)
-
     return FoodBrand(
         obj.optString("company", null),
         obj.optString("owner", null),
-        obj.opt("founding year")?.toStringNullCheck()?.toInt(),
+        obj.opt("founding year")?.serializeNullToString()?.toInt(),
     )
 }
 
@@ -34,9 +33,9 @@ internal fun String.toPetObject(): Pet {
     return Pet(
         obj.optString("type", null),
         obj.optString("name", null),
-        obj.opt("mine")?.toStringNullCheck()?.toBoolean(),
-        obj.opt("weight")?.toStringNullCheck()?.toDouble(),
-        obj.opt("gender")?.toStringNullCheck()?.get(0),
+        obj.opt("mine")?.serializeNullToString()?.toBoolean(),
+        obj.opt("weight")?.serializeNullToString()?.toDouble(),
+        obj.opt("gender")?.serializeNullToString()?.get(0),
 
         //val foods: Collection<Collection<String?>?>?
         obj.optJSONArray("foods")?.let {
@@ -46,11 +45,11 @@ internal fun String.toPetObject(): Pet {
                     if (it == JSONObject.NULL) {
                         null
                     } else {
-                        val objB = JSONArray(it.toStringNullCheck())?.let {
+                        val objB = JSONArray(it.serializeNullToString())?.let {
                             val objC = mutableListOf<String?>()
                             for (i in 0 until it.length()) {
                                 objC.add(it[i].let {
-                                    if (it == JSONObject.NULL) { null } else { it?.toStringNullCheck() }
+                                    if (it == JSONObject.NULL) { null } else { it?.serializeNullToString() }
                                 })
                             }
                             objC
@@ -66,21 +65,21 @@ internal fun String.toPetObject(): Pet {
 internal fun String.toPrimitiveTestObject(): PrimitiveTest {
     val obj = JSONObject(this)
     return PrimitiveTest(
-        obj.opt("Nullable Byte")?.toStringNullCheck()?.toByte(),
+        obj.opt("Nullable Byte")?.serializeNullToString()?.toByte(),
         obj.opt("Byte").toString().toByte(),
-        obj.opt("Nullable Short")?.toStringNullCheck()?.toShort(),
+        obj.opt("Nullable Short")?.serializeNullToString()?.toShort(),
         obj.opt("Short").toString().toShort(),
-        obj.opt("Nullable Int")?.toStringNullCheck()?.toInt(),
+        obj.opt("Nullable Int")?.serializeNullToString()?.toInt(),
         obj.opt("Int").toString().toInt(),
-        obj.opt("Nullable Long")?.toStringNullCheck()?.toLong(),
+        obj.opt("Nullable Long")?.serializeNullToString()?.toLong(),
         obj.opt("Long").toString().toLong(),
-        obj.opt("Nullable Float")?.toStringNullCheck()?.toFloat(),
+        obj.opt("Nullable Float")?.serializeNullToString()?.toFloat(),
         obj.opt("Float").toString().toFloat(),
-        obj.opt("Nullable Double")?.toStringNullCheck()?.toDouble(),
+        obj.opt("Nullable Double")?.serializeNullToString()?.toDouble(),
         obj.opt("Double").toString().toDouble(),
-        obj.opt("Nullable Boolean")?.toStringNullCheck()?.toBoolean(),
+        obj.opt("Nullable Boolean")?.serializeNullToString()?.toBoolean(),
         obj.opt("Boolean").toString().toBoolean(),
-        obj.opt("Nullable Char")?.toStringNullCheck()?.get(0),
+        obj.opt("Nullable Char")?.serializeNullToString()?.get(0),
         obj.opt("Char").toString().get(0),
         obj.optString("Nullable String", null),
         obj.optString("String", null),
@@ -91,7 +90,7 @@ internal fun String.toPrimitiveTestObject(): PrimitiveTest {
             val objA = mutableListOf<Int?>()
             for (i in 0 until it.length()) {
                 objA.add(it[i].let {
-                    if (it == JSONObject.NULL) { null } else { it?.toString()?.toInt() }
+                    if (it == JSONObject.NULL) { null } else { it?.serializeNullToString()?.toInt() }
                 })
             }
             objA
@@ -101,11 +100,11 @@ internal fun String.toPrimitiveTestObject(): PrimitiveTest {
         obj.optJSONObject("Map")?.let {
             val objA = mapOf<String, Int?>(
                 "hello1" to if (it.opt("hello1") == JSONObject.NULL) { null }
-                    else { it.opt("hello1")?.toString()?.toInt() },
+                    else { it.opt("hello1")?.serializeNullToString()?.toInt() },
                 "hello2" to if (it.opt("hello2") == JSONObject.NULL) { null }
-                    else { it.opt("hello2")?.toString()?.toInt() },
+                    else { it.opt("hello2")?.serializeNullToString()?.toInt() },
                 "hello_none" to if (it.opt("hello_none") == JSONObject.NULL) { null }
-                    else { it.opt("hello_none")?.toString()?.toInt() },
+                    else { it.opt("hello_none")?.serializeNullToString()?.toInt() },
             )
             objA
         }
