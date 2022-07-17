@@ -70,14 +70,13 @@ private fun StringBuilder.serializeString(s: String) {
     append('\"')
 }
 
-private fun Char.escape(): Any =
-    when (this) {
-        '\\' -> "\\\\"
-        '\"' -> "\\\""
-        '\b' -> "\\b"
-        '\u000C' -> "\\f"
-        '\n' -> "\\n"
-        '\r' -> "\\r"
-        '\t' -> "\\t"
-        else -> this
-    }
+private fun Char.escape(): Any = when (this) {
+    '\"' -> "\\\""
+    '\\' -> "\\\\"
+    '\t' -> "\\t"
+    '\b' -> "\\b"
+    '\n' -> "\\n"
+    '\r' -> "\\r"
+    '\u000C' -> "\\f"
+    else -> this
+}

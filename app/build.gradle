@@ -50,10 +50,11 @@ dependencies {
     implementation project(':annotation')
     kapt project(':codegen')
 
+    implementation project(':abson')
+
     // [Fix] Method put in org.json.JSONObject not mocked.
     testImplementation 'org.json:json:20210307'
 
     implementation 'com.google.code.gson:gson:2.9.0'
-
-    implementation project(':abson')
+    implementation 'com.beust:klaxon:5.5'
 }
