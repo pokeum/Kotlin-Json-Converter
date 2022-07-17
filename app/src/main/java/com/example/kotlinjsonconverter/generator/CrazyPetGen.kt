@@ -7,7 +7,7 @@ fun generate_CrazyPet_Cat() = CrazyPet(
     "Meow",
     true,
     12.5,
-    'F',
+    //'F',
     mapOf(
         "raw1" to listOf(
             mapOf("inner1" to listOf(generate_CatFood_A(), generate_CatFood_B())),

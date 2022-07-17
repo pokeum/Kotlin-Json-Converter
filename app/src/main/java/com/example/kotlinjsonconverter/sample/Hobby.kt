@@ -1,6 +1,6 @@
 package com.example.kotlinjsonconverter.sample
 
-import co.ab180.abson.JsonName
+import com.beust.klaxon.Json
 import com.example.annotation.SerialName
 import com.example.annotation.Serializable
 import com.google.gson.annotations.SerializedName
@@ -8,13 +8,19 @@ import com.google.gson.annotations.SerializedName
 @Serializable
 data class Hobby(
     @JvmField
-    @SerialName("type")      // codegen
-    @JsonName("type")        // abson
-    @SerializedName("type")  // gson
+    @SerialName("type")         // codegen
+    @SerializedName("type")     // gson
+    @Json(                      // klaxon
+        name = "type",
+        serializeNull = false
+    )
     val type: String,
     @JvmField
     @SerialName("time")
-    @JsonName("time")
     @SerializedName("time")
+    @Json(
+        name = "time",
+        serializeNull = false
+    )
     val time: Int
 )

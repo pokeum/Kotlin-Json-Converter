@@ -1,6 +1,6 @@
 package com.example.kotlinjsonconverter.sample
 
-import co.ab180.abson.JsonName
+import com.beust.klaxon.Json
 import com.example.annotation.SerialName
 import com.example.annotation.Serializable
 import com.google.gson.annotations.SerializedName
@@ -8,18 +8,27 @@ import com.google.gson.annotations.SerializedName
 @Serializable
 data class PetFood(
     @JvmField
-    @SerialName("brand")         // codegen
-    @JsonName("brand")           // abson
-    @SerializedName("brand")     // gson
+    @SerialName("brand")        // codegen
+    @SerializedName("brand")    // gson
+    @Json(                      // klaxon
+        name = "brand",
+        serializeNull = false
+    )
     val brand: FoodBrand,
     @JvmField
     @SerialName("label")
-    @JsonName("label")
     @SerializedName("label")
+    @Json(
+        name = "label",
+        serializeNull = false
+    )
     val label: String,
     @JvmField
     @SerialName("price")
-    @JsonName("price")
     @SerializedName("price")
+    @Json(
+        name = "price",
+        serializeNull = false
+    )
     val price: Float
 ) { override fun toString() = "{brand: $brand, label: $label, price: $price}" }

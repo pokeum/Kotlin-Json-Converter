@@ -11,7 +11,6 @@ class CrazyPetTest {
 
     @Test
     fun test_serialization() {
-
         val crazyPet = generate_CrazyPet_Cat()
         val crazyPetJsonString = crazyPet.toJSONObject().toString(4)
         println(crazyPetJsonString)
