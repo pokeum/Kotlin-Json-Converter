@@ -21,13 +21,13 @@ internal fun String.toFoodBrandObject(): FoodBrand {
 
 internal fun String.toPetFoodObject(): PetFood {
     val obj = JSONObject(this)
+    val nullHandler = NullHandler<FoodBrand>()
     return PetFood(
-        obj.optJSONObject("brand")?.serializeNullToString()?.toFoodBrandObject(),
+        nullHandler.handle(obj.optJSONObject("brand")?.serializeNullToString()?.toFoodBrandObject()),
         obj.optString("label", null),
         obj.opt("price").toString().toFloat(),
     )
 }
-
 
 internal fun String.toPetObject(): Pet {
     val obj = JSONObject(this)

@@ -14,8 +14,8 @@ data class PetFood(
         name = "brand",
         serializeNull = false
     )
-    val brand: FoodBrand?,
-    //val brand: FoodBrand,
+    //val brand: FoodBrand?,
+    val brand: FoodBrand,
     @JvmField
     @SerialName("label")
     @SerializedName("label")
