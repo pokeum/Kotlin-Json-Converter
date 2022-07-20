@@ -22,11 +22,12 @@ internal fun String.toFoodBrandObject(): FoodBrand {
 internal fun String.toPetFoodObject(): PetFood {
     val obj = JSONObject(this)
     return PetFood(
-        obj.getJSONObject("brand").toString().toFoodBrandObject(),
+        obj.optJSONObject("brand")?.serializeNullToString()?.toFoodBrandObject(),
         obj.optString("label", null),
         obj.opt("price").toString().toFloat(),
     )
 }
+
 
 internal fun String.toPetObject(): Pet {
     val obj = JSONObject(this)

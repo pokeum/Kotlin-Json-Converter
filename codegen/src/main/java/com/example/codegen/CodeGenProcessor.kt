@@ -2,7 +2,6 @@ package com.example.codegen
 
 import com.example.annotation.SerialName
 import com.example.annotation.Serializable
-import com.example.codegen.commons.Logger
 import com.example.codegen.model.Bindings
 import com.google.auto.service.AutoService
 import javax.annotation.processing.AbstractProcessor

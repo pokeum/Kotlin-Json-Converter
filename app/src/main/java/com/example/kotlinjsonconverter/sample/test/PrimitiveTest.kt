@@ -87,6 +87,7 @@ data class PrimitiveTest(
     @SerializedName("Collection")
     //val mCollection: Collection<Int?>?,
     val mCollection: List<Int?>?,
+    //val mCollection: Set<Int?>?,
 
     /** Add Map */
     @JvmField

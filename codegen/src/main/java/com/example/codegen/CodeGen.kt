@@ -2,6 +2,7 @@ package com.example.codegen
 
 import com.example.annotation.Serializable
 import com.example.codegen.commons.Primitive
+import com.example.codegen.extension.getSimpleName
 import com.example.codegen.extension.isExtendedBy
 import com.example.codegen.extension.isNullablePrimitive
 import com.example.codegen.model.ClassBinding
@@ -17,7 +18,7 @@ import javax.tools.Diagnostic
 
 object CodeGen {
 
-    private const val SERIALIZE_NULL = true
+    private const val SERIALIZE_NULL = false
 
     private val JSON_OBJECT_CLASS_NAME = JSONObject::class.asClassName()
     private val JSON_ARRAY_CLASS_NAME = JSONArray::class.asClassName()
@@ -158,6 +159,7 @@ object CodeGen {
             .addModifiers(KModifier.INTERNAL)
             .receiver(String::class)
             .returns(binding.getClassName())
+            //.returns(binding.getClassName().copy(true))
             .addStatement(serializeNullToStringFuncStatement())
             .addStatement("val obj = %L(this)", JSON_OBJECT_CLASS_NAME.simpleName)
             .addStatement("return %L(", binding.getSimpleName())
@@ -197,6 +199,8 @@ object CodeGen {
                             ProcessingEnvUtils.printMessage(Diagnostic.Kind.ERROR,
                                 "Invalid JSON field type provided",
                                 binding.fieldElement)
+                        } else {
+                            builder.addStatement("obj.optJSONObject(%S)?.$SERIALIZE_NULL_TO_STRING_FUN_NAME()?.to${declaredType.getSimpleName()}Object(),", binding.getKeyName())
                         }
                     }
                 }
